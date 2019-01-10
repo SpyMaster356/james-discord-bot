@@ -5,9 +5,4 @@ export default {
   logger: {
     level: "debug",
   },
-
-  dataSource: {
-    type: 'disk',
-    dataDir: Path.join(__dirname, '../data'),
-  },
-}
+};

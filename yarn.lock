@@ -171,6 +171,10 @@ ms@^2.1.1:
   dependencies:
     winston "^3.0.0"
 
+"nix-data-memory@git://github.com/nix-core/nix-data-memory.git#v0.0.1":
+  version "0.1.0"
+  resolved "git://github.com/nix-core/nix-data-memory.git#99c319009ccae787645afbe520fcfe926eec3434"
+
 one-time@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/one-time/-/one-time-0.0.4.tgz#f8cdf77884826fe4dff93e3a9cc37b1e4480742e"

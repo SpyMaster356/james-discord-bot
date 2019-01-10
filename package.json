@@ -1,16 +1,17 @@
 {
   "name": "james-discord-bot",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Discord Bot for the Iron Family",
   "main": "index.js",
   "author": "SpyMaster356",
   "license": "MIT",
   "scripts": {
-    "start": "node --experimental-modules index.mjs"
+    "start": "node index.js"
   },
   "dependencies": {
     "discord.js": "^11.4.2",
     "nix-core": "git://github.com/nix-core/nix-core.git#develop",
-    "rx": "^4.1.0"
+    "rx": "^4.1.0",
+    "nix-data-memory": "git://github.com/nix-core/nix-data-memory.git#v0.0.1"
   }
 }
