@@ -14,6 +14,7 @@ james.addModule({
     require('./lib/commands/raid'),
     require('./lib/commands/cancel'),
     require('./lib/commands/start'),
+    require('./lib/commands/raiders'),
   ],
 });
 
