@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   ownerUserId: null,
   loginToken: null,
 
