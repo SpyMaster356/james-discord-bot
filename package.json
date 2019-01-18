@@ -6,12 +6,12 @@
   "author": "SpyMaster356",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node %NODE_DEBUG_OPTION% index.js"
   },
   "dependencies": {
     "discord.js": "^11.4.2",
     "nix-core": "git://github.com/nix-core/nix-core.git#develop",
     "rx": "^4.1.0",
-    "nix-data-memory": "git://github.com/nix-core/nix-data-memory.git#v0.0.1"
+    "nix-data-disk": "git://github.com/nix-core/nix-data-disk.git#v0.0.0"
   }
 }
