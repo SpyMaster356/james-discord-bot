@@ -1,13 +1,13 @@
-const RaidService = require('./services/raid-service');
+const DataKeys = require('./data-keys');
 
 module.exports = {
   name: "iron-family",
   enabledByDefault: true,
   defaultData: [
-    {keyword: RaidService.DataKeys.UsersToNotify, data: []}
+    {keyword: DataKeys.UsersToNotify, data: []}
   ],
   services: [
-    RaidService,
+    require('./services/raid-service'),
   ],
   commands: [
     require('./commands/raid'),

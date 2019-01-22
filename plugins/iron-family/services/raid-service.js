@@ -1,11 +1,8 @@
 const Rx = require('rx');
 const DiscordAPIError = require('discord.js').DiscordAPIError;
-
 const Service = require('nix-core').Service;
 
-const DataKeys = {
-  UsersToNotify: "raids.UsersToNotify"
-};
+const DataKeys = require('../data-keys');
 
 class RaidService extends Service {
   constructor(nix) {
@@ -126,7 +123,5 @@ class RaidService extends Service {
       .flatMap((subscribedUsers) => this.nix.setGuildData(member.guild, DataKeys.UsersToNotify, subscribedUsers))
   }
 }
-
-RaidService.DataKeys = DataKeys;
 
 module.exports = RaidService;
