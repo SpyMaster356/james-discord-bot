@@ -12,6 +12,7 @@ let james = new NixCore({
 });
 
 james.addModule(require('./plugins/iron-family'));
+james.addModule(require('./plugins/auto-roles'));
 
 james.listen()
   .subscribe(

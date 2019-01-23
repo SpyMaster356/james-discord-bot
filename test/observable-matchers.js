@@ -14,17 +14,20 @@ module.exports = function (chai) {
 
   Assertion.addMethod('emit', function (items) {
     new Assertion(this._obj).to.be.observable;
-    this._obj.toArray().subscribe((emittedItems) => new Assertion(emittedItems).to.deep.equal(items));
+
+    this._obj = this._obj
+      .toArray()
+      .map((emittedItems) => { new Assertion(emittedItems).to.deep.equal(items); });
   });
 
   Assertion.overwriteMethod('throw', function (_super) {
-    return function(errorLike, errMsgMatcher, msg) {
+    return function (errorLike, errMsgMatcher, msg) {
       if (this._obj instanceof Rx.Observable) {
         this._obj
           .subscribe(
             () => {},
             (error) => { new Assertion(error).to.be.an.instanceOf(errorLike); },
-            () => { throw new Error("Expected stream to throw an error."); });
+            () => { throw new Error('Expected stream to throw an error.'); });
       } else {
         return _super(errorLike, errMsgMatcher, msg);
       }
