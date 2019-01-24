@@ -7,7 +7,7 @@ const {
 } = require('../errors');
 
 describe('AutoRoleService', function () {
-  beforeEach(function (done) {
+  beforeEach(function () {
     this.nix = createNixStub();
     this.autoRoleService = new AutoRoleService(this.nix);
 
@@ -16,9 +16,55 @@ describe('AutoRoleService', function () {
       name: 'Test Guild',
       roles: new Map(),
     };
+  });
 
-    this.nix.setGuildData(this.guild.id, DataKeys.JoinRoles, [])
-      .subscribe(() => {}, (error) => done(error), () => done());
+  describe('#getJoinRoleIds', function () {
+    context('when there are no roles', function () {
+      beforeEach(function (done) {
+        this.nix.setGuildData(this.guild.id, DataKeys.JoinRoles, [])
+          .subscribe(() => {}, (error) => done(error), () => done());
+      });
+
+      it('emits an empty array', function (done) {
+        expect(this.autoRoleService.getJoinRoleIds(this.guild))
+          .to.emit([[]]).and.complete(done);
+      });
+    });
+
+    context('when there are roles', function () {
+      beforeEach(function (done) {
+        this.roleIds = [
+          '0000-role-1',
+          '0000-role-2',
+          '0000-role-3',
+        ];
+
+        this.nix.setGuildData(this.guild.id, DataKeys.JoinRoles, this.roleIds)
+          .subscribe(() => {}, (error) => done(error), () => done());
+      });
+
+      it('emits an array of role ids', function (done) {
+        expect(this.autoRoleService.getJoinRoleIds(this.guild))
+          .to.emit([this.roleIds]).and.complete(done);
+      });
+    });
+  });
+
+  describe('#setJoinRoleIds', function () {
+    beforeEach(function () {
+      this.roleIds = [
+        '0000-role-1',
+        '0000-role-2',
+        '0000-role-3',
+      ];
+    });
+
+    it('it saves the role id list', function (done) {
+      let stream$ = this.autoRoleService.setJoinRoleIds(this.guild, this.roleIds)
+        .flatMap(() => this.nix.getGuildData(this.guild.id, DataKeys.JoinRoles));
+
+      expect(stream$).to.emit([this.roleIds]).and.complete(done);
+    });
   });
 
   describe('#getJoinRoles', function () {

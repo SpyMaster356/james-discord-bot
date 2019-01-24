@@ -8,9 +8,24 @@ const {
 } = require('../errors');
 
 class AutoRoleService extends Service {
-  getJoinRoles(guild) {
+  getJoinRoleIds(guild) {
     return Rx.Observable.of('')
       .flatMap(() => this.nix.getGuildData(guild.id, DataKeys.JoinRoles))
+      .flatMap((roleIds) => Rx.Observable.if(
+        () => typeof roleIds === "undefined",
+        Rx.Observable.of([]),
+        Rx.Observable.of(roleIds),
+      ))
+  }
+
+  setJoinRoleIds(guild, roleIds) {
+    return Rx.Observable.of('')
+      .flatMap(() => this.nix.setGuildData(guild.id, DataKeys.JoinRoles, roleIds))
+  }
+
+  getJoinRoles(guild) {
+    return Rx.Observable.of('')
+      .flatMap(() => this.getJoinRoleIds(guild))
       .flatMap((roleIds) => Rx.Observable.from(roleIds))
       .map((roleId) => guild.roles.get(roleId))
       .filter((role) => role)
@@ -19,19 +34,19 @@ class AutoRoleService extends Service {
 
   addJoinRole(guild, role) {
     return Rx.Observable.of('')
-      .flatMap(() => this.nix.getGuildData(guild.id, DataKeys.JoinRoles))
+      .flatMap(() => this.getJoinRoleIds(guild))
       .flatMap((roleIds) => Rx.Observable.if(
         () => roleIds.indexOf(role.id) === -1,
         Rx.Observable.of(roleIds),
         Rx.Observable.throw(new RoleAlreadyAddedError())
       ))
       .map((roleIds) => ([...roleIds, role.id]))
-      .flatMap((roleIds) => this.nix.setGuildData(guild.id, DataKeys.JoinRoles, roleIds));
+      .flatMap((roleIds) => this.setJoinRoleIds(guild, roleIds));
   }
 
   removeJoinRole(guild, role) {
     return Rx.Observable.of('')
-      .flatMap(() => this.nix.getGuildData(guild.id, DataKeys.JoinRoles))
+      .flatMap(() => this.getJoinRoleIds(guild))
       .flatMap((roleIds) => Rx.Observable.if(
         () => roleIds.indexOf(role.id) > -1,
         Rx.Observable.of(roleIds),
@@ -42,7 +57,7 @@ class AutoRoleService extends Service {
         roleIds.splice(roleIds.indexOf(role.id), 1);
         return roleIds;
       })
-      .flatMap((roleIds) => this.nix.setGuildData(guild.id, DataKeys.JoinRoles, roleIds));
+      .flatMap((roleIds) => this.setJoinRoleIds(guild, roleIds));
   }
 }
 

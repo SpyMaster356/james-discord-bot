@@ -47,9 +47,13 @@ module.exports = function (chai) {
 
   Assertion.addMethod('complete', function (done, callback) {
     new Assertion(this._obj).to.be.an.instanceOf(Rx.Observable);
-    this._obj.subscribe(() => {}, (error) => done(error), () => {
-      if (callback) { callback(); }
-      done();
-    });
+    this._obj.subscribe(
+      () => {},
+      (error) => done(error),
+      () => {
+        if (callback) { callback(); }
+        done();
+      },
+    );
   });
 };
