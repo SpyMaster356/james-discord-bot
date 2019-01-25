@@ -9,7 +9,10 @@ module.exports = function (chai) {
 
   Assertion.addMethod('emitLength', function (length) {
     new Assertion(this._obj).to.be.observable;
-    this._obj.count(() => true).subscribe((emittedLength) => new Assertion(emittedLength).to.eq(length));
+
+    this._obj = this._obj
+      .count(() => true)
+      .map((emittedLength) => new Assertion(emittedLength).to.eq(length));
   });
 
   Assertion.addMethod('emit', function (items) {

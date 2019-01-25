@@ -9,6 +9,9 @@ module.exports = {
   services: [
     require('./services/auto-role-service'),
   ],
-  commands: [
-  ],
+  configActions: [
+    require('./config/add-join-role'),
+    require('./config/rm-join-role'),
+    require('./config/list'),
+  ]
 };

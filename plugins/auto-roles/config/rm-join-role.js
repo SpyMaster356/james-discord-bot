@@ -3,17 +3,17 @@ const Rx = require('rx');
 const findRole = require('../lib/role-utilities').findRole;
 const {
   AutoRoleError,
-  RoleAlreadyAddedError,
+  RoleNotAddedError,
 } = require('../errors');
 
 module.exports = {
-  name: 'addJoinRole',
-  description: "Add a role to the list to automatically grant to new users.",
+  name: 'rmJoinRole',
+  description: "Remove a role from the list to automatically grant to new users.",
 
   inputs: [
     {
       name: 'role',
-      description: 'A name, mention, or ID of a role to grant when a user joins',
+      description: 'A name, mention, or ID of the role to remove',
       required: true,
     },
   ],
@@ -29,7 +29,7 @@ module.exports = {
     if (!roleString) {
       return Rx.Observable.of({
         status: 400,
-        content: `The name of a role to assign is required`,
+        content: `The name of a role to remove is required`,
       });
     }
 
@@ -42,10 +42,10 @@ module.exports = {
     }
 
     return Rx.Observable.of('')
-      .flatMap(() => this.autoRoleService.addJoinRole(guild, role))
+      .flatMap(() => this.autoRoleService.removeJoinRole(guild, role))
       .map(() => ({
         status: 200,
-        content: `the role ${role.name} will be granted to users when they join`,
+        content: `the role ${role.name} has been removed from the list.`,
       }))
       .catch((error) => {
         if (error instanceof AutoRoleError) {
@@ -57,10 +57,10 @@ module.exports = {
   },
 
   handleAutoRoleError(error) {
-    if (error instanceof RoleAlreadyAddedError) {
+    if (error instanceof RoleNotAddedError) {
       return Rx.Observable.of({
         status: 400,
-        message: 'That role is already being granted to new users.',
+        message: 'That role is not on the list.',
       });
     } else {
       throw Rx.Observable.throw(error);

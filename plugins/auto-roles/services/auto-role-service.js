@@ -8,6 +8,25 @@ const {
 } = require('../errors');
 
 class AutoRoleService extends Service {
+  onNixListen() {
+    this.nix.streams.guildMemberAdd$
+      .flatMap((newMember) => this.handleMemberJoin(newMember))
+      .subscribe(
+        () => {},
+        (error) => this.nix.handleError(error, [
+          { name: "Event", value: "guildMemberAdd$" },
+        ])
+      )
+  }
+
+  handleMemberJoin(newMember) {
+    return Rx.Observable.of('')
+      .flatMap(() => this.getJoinRoles(newMember.guild))
+      .flatMap((roles) => Rx.Observable.from(roles))
+      .concatMap((role) => newMember.addRole(role))
+      .toArray()
+  }
+
   getJoinRoleIds(guild) {
     return Rx.Observable.of('')
       .flatMap(() => this.nix.getGuildData(guild.id, DataKeys.JoinRoles))
