@@ -21,7 +21,7 @@ module.exports = {
 
         return {
           status: 200,
-          message: "Here are all the configured roles:",
+          content: "Here are all the configured roles:",
           embed: embed,
         };
       });
