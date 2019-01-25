@@ -65,8 +65,10 @@ module.exports = {
           content:
             `A raider is ready! That makes ${raiders.length}:\n` +
             `${raiders.map((u) => `  - ${u.displayName}`).join('\n')}\n\n` +
-            `*Use \`!cancel\` to remove yourself.*\n` +
-            `*I'll also automatically remove you when you go offline.*`,
+            `*Use \`!cancel\` to remove yourself. I'll also automatically `+
+            `remove you when you go offline.*\n` +
+            `*You can also use \`!notify\` to get messaged when someone ` +
+            `wants to raid.*`,
         }),
       );
   },
